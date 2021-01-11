@@ -2,17 +2,22 @@ import pygame
 import random
 import os
 import math
+from pygame import mixer
 
 base_path = os.path.dirname(__file__)
 
 # Initialize pygame
 pygame.init()
 
-# Create the game screen
-screen = pygame.display.set_mode((800,600))
+# Create the game window
+window = pygame.display.set_mode((800,600))
 
 # Background
 bg = pygame.image.load("space-bg.gif")
+
+# Background music
+mixer.music.load('background.wav')
+mixer.music.play(-1)
 
 # Title and Icon
 pygame.display.set_caption("Space Invaders")
@@ -41,7 +46,7 @@ for i in range(no_of_enemies):
     enemyImg.append(pygame.image.load("enemy.png"))
     eX.append(random.randint(0,800))
     eY.append(random.randint(50,150))
-    eX_change.append(0.2)
+    eX_change.append(0.3)
     eY_change.append(40)
 
 # Bullet
@@ -55,28 +60,31 @@ b_state = "ready"
 
 # Score
 score_val = 0
-font = pygame.font.Font('ARCADECLASSIC.ttf',32)
+font = pygame.font.Font('ka1.ttf',32)
 textX = 10
 textY = 10
 
+# Game over
+over_font = pygame.font.Font('ka1.ttf',64)
+
 def getScore(x,y):
-    score = font.render("Score =  "+ str(score_val),True,(255,255,255))
-    screen.blit(score,(x,y))
+    score = font.render("Score - "+ str(score_val),True,(255,255,255))
+    window.blit(score,(x,y))
 
 # Player method
 def player(x,y):
     # Draws an image of the player
-    screen.blit(ssImg, (x, y))
+    window.blit(ssImg, (x, y))
 
 # Player method
 def enemy(x,y,i):
     # Draws an image of the player
-    screen.blit(enemyImg[i], (x, y))
+    window.blit(enemyImg[i], (x, y))
 
 def bullet_fire(x,y):
     global b_state
     b_state = "fire"
-    screen.blit(bulletImg, (x + 16, y + 10))
+    window.blit(bulletImg, (x + 16, y + 10))
 
 # Collision checker
 def isCollision(eX, eY, bX, bY):
@@ -86,14 +94,23 @@ def isCollision(eX, eY, bX, bY):
     else:
         return False
 
+def game_over():
+    gameover_text = over_font.render("GAME OVER!",True,(255,255,255))
+    window.blit(gameover_text, (160,220))
+
 # Condition for the game to keep running
 run_game = True
 
 while run_game:
-    
-    screen.fill((0,0,0))
+    score_show = 0
 
-    screen.blit(bg,(0,0))
+    window.fill((0,0,0))
+
+    window.blit(bg,(0,0))
+
+    line = (random.randint(0,255),random.randint(0,255), random.randint(0,255))
+
+    pygame.draw.line(window, line, (0,450),(800,450),5)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -101,15 +118,17 @@ while run_game:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                ssX_change = -0.2
+                ssX_change = -0.5
             if event.key == pygame.K_RIGHT:
-                ssX_change = 0.2
+                ssX_change = 0.5
             if event.key == pygame.K_UP:
-                ssY_change = -0.2
+                ssY_change = -0.5
             if event.key == pygame.K_DOWN:
-                ssY_change = 0.2
+                ssY_change = 0.5
             if event.key == pygame.K_SPACE:
                 if b_state == "ready":
+                    bullet_sound = mixer.Sound('shoot.wav')
+                    bullet_sound.play()
                     bX = ssX
                     bY = ssY
                     bullet_fire(bX,bY)
@@ -132,12 +151,20 @@ while run_game:
 
     if ssY >= 536: 
         ssY = 536
-    elif ssY <= 0:
-        ssY = 0
+    elif ssY <= 450:
+        ssY = 450
 
     # Changing the position of the enemy
-    
     for i in range(no_of_enemies): 
+
+        # Game over
+        if eY[i] > 400:
+            for j in range(no_of_enemies):
+                eY[j] = 2000
+            game_over()
+            score_show = 1
+            break
+
         eX[i] += eX_change[i]
         if eX[i] <=0:
             eX_change[i] = 0.2
@@ -148,6 +175,8 @@ while run_game:
 
         collision = isCollision(eX[i],eY[i],bX,bY)
         if collision:
+            invader_dead = mixer.Sound('invaderkilled.wav')
+            invader_dead.play()
             bY = ssY
             b_state = "ready"
             score_val += 1
@@ -165,5 +194,8 @@ while run_game:
         bY -= bY_change
 
     player(ssX,ssY)
-    getScore(textX,textY)
+    if score_show == 1:
+        getScore(300,500)
+    else:
+        getScore(textX,textY)
     pygame.display.update()
