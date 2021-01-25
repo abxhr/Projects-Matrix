@@ -13,28 +13,30 @@ pygame.init()
 window = pygame.display.set_mode((800,600))
 
 # Background
-bg = pygame.image.load("space-bg.gif")
+bg_path = os.path.join(base_path, "assets/space-bg.gif")
+bg = pygame.image.load(bg_path)
 
 # Background music
-mixer.music.load('background.wav')
+music_path = os.path.join(base_path, "assets/background.wav")
+mixer.music.load(music_path)
 mixer.music.play(-1)
 
 # Title and Icon
 pygame.display.set_caption("Space Invaders")
-#icon_path = os.path.join(base_path, "assets/ufo.png")
-icon = pygame.image.load("ufo.png")
+icon_path = os.path.join(base_path, "assets/ufo.png")
+icon = pygame.image.load(icon_path)
 pygame.display.set_icon(icon)
 
 # Spaceship
-#ss_path = os.path.join(base_path, "assets/spaceship.png")
-ssImg = pygame.image.load("spaceship.png")
+ss_path = os.path.join(base_path, "assets/spaceship.png")
+ssImg = pygame.image.load(ss_path)
 ssX = 370
 ssY = 480
 ssX_change = 0
 ssY_change = 0
 
 # Enemy
-#enemy_path = os.path.join(base_path, "assets/enemy.png")
+enemy_path = os.path.join(base_path, "assets/enemy.png")
 enemyImg = []
 eX = []
 eY = []
@@ -43,15 +45,15 @@ eY_change = []
 no_of_enemies = 6
 
 for i in range(no_of_enemies):
-    enemyImg.append(pygame.image.load("enemy.png"))
+    enemyImg.append(pygame.image.load(enemy_path))
     eX.append(random.randint(0,800))
     eY.append(random.randint(50,150))
     eX_change.append(0.3)
     eY_change.append(40)
 
 # Bullet
-#enemy_path = os.path.join(base_path, "assets/enemy.png")
-bulletImg = pygame.image.load("bullet.png")
+bullet_path = os.path.join(base_path, "assets/bullet.png")
+bulletImg = pygame.image.load(bullet_path)
 bX = 0
 bY = 0
 bX_change = 0
@@ -60,12 +62,13 @@ b_state = "ready"
 
 # Score
 score_val = 0
-font = pygame.font.Font('ka1.ttf',32)
+font_path = os.path.join(base_path, "assets/ka1.ttf")
+font = pygame.font.Font(font_path,32)
 textX = 10
 textY = 10
 
 # Game over
-over_font = pygame.font.Font('ka1.ttf',64)
+over_font = pygame.font.Font(font_path,64)
 
 def getScore(x,y):
     score = font.render("Score - "+ str(score_val),True,(255,255,255))
@@ -127,7 +130,8 @@ while run_game:
                 ssY_change = 0.5
             if event.key == pygame.K_SPACE:
                 if b_state == "ready":
-                    bullet_sound = mixer.Sound('shoot.wav')
+                    bullet_sound_path = os.path.join(base_path, 'assets/shoot.wav')
+                    bullet_sound = mixer.Sound(bullet_sound_path)
                     bullet_sound.play()
                     bX = ssX
                     bY = ssY
@@ -175,7 +179,8 @@ while run_game:
 
         collision = isCollision(eX[i],eY[i],bX,bY)
         if collision:
-            invader_dead = mixer.Sound('invaderkilled.wav')
+            invader_dead_path = os.path.join(base_path,'assets/invaderkilled.wav')
+            invader_dead = mixer.Sound(invader_dead_path)
             invader_dead.play()
             bY = ssY
             b_state = "ready"
