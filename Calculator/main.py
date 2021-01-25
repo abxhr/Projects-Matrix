@@ -1,4 +1,5 @@
 from tkinter import *
+import math as m
 
 frame = Tk()
 frame.title("Calculator")
@@ -47,6 +48,33 @@ def divide():
     f_num = int(first)
     user_in.delete(0,END)
 
+def sqroot():
+    first = user_in.get()
+    global f_num
+    global op
+    op = '√'
+    f_num = int(first)
+    user_in.delete(0,END)
+    user_in.insert(0,m.sqrt(f_num))
+
+def sqr():
+    first = user_in.get()
+    global f_num
+    global op
+    op = '²'
+    f_num = int(first)
+    user_in.delete(0,END)
+    user_in.insert(0,f_num*f_num)
+
+def fact():
+    first = user_in.get()
+    global f_num
+    global op
+    op = '!'
+    f_num = int(first)
+    user_in.delete(0,END)
+    user_in.insert(0,m.factorial(f_num))
+
 def equal():
     second = user_in.get()
     user_in.delete(0,END)
@@ -58,6 +86,7 @@ def equal():
         user_in.insert(0,f_num * int(second))
     elif op == '/':
         user_in.insert(0,f_num / int(second))
+
 
 
 button_1 = Button(frame,text="1",padx=40,pady=20,command=lambda: click(1))
@@ -75,6 +104,9 @@ button_add = Button(frame,text="+",padx=39,pady=20,command=add)
 button_subtract = Button(frame,text="-",padx=39,pady=20,command=subtract)
 button_multiply = Button(frame,text="*",padx=39,pady=20,command=multiply)
 button_divide = Button(frame,text="/",padx=39,pady=20,command=divide)
+button_sqroot = Button(frame,text="√",padx=39,pady=20,command=sqroot)
+button_sqr = Button(frame,text="x²",padx=39,pady=20,command=sqr)
+button_fact = Button(frame,text="x!",padx=39,pady=20,command=fact)
 
 button_equal = Button(frame,text="=",padx=89,pady=20,command=equal)
 button_clear = Button(frame,text="AC",padx=84,pady=20,command=clear)
@@ -100,5 +132,8 @@ button_equal.grid(row=5,column=1,columnspan=2)
 button_subtract.grid(row=6,column=0)
 button_multiply.grid(row=6,column=1)
 button_divide.grid(row=6,column=2)
+button_sqroot.grid(row=7,column=0)
+button_sqr.grid(row=7,column=1)
+button_fact.grid(row=7,column=2)
 
 frame.mainloop()
