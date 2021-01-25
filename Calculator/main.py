@@ -3,8 +3,9 @@ import math as m
 
 frame = Tk()
 frame.title("Calculator")
+frame.iconbitmap("assets/calculator.ico")
 
-user_in = Entry(frame,width=30,borderwidth=5)
+user_in = Entry(frame,width=45,borderwidth=5)
 user_in.grid(row=0,column=0,columnspan=3,padx=10,pady=10)
 user_in.insert(0,"")
 
