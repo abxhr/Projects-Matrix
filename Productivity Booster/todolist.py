@@ -162,6 +162,40 @@ def todo():
             changer.iconbitmap('assets/productivity.ico')
             changer.resizable(False, False)
 
+            def red_change():
+                tasks_box.itemconfig(
+                    tasks_box.curselection(),
+                    fg='red'
+                )
+
+            def blue_change():
+                tasks_box.itemconfig(
+                    tasks_box.curselection(),
+                    fg='blue'
+                )
+
+            def green_change():
+                tasks_box.itemconfig(
+                    tasks_box.curselection(),
+                    fg='green'
+                )
+
+            def orange_change():
+                tasks_box.itemconfig(
+                    tasks_box.curselection(),
+                    fg='orange'
+                )
+
+            def hexa_change():
+                hexa_code = hexa_entry.get()
+                try:
+                    tasks_box.itemconfig(
+                        tasks_box.curselection(),
+                        fg=hexa_code
+                    )
+                except:
+                    messagebox.showerror(title="Invalid Code", message="Enter a valid hexa color")
+
             red_button = Button(changer,text="Red",width=13,fg='red',command=red_change)
             red_button.grid(row=0,column=0,pady=5,padx=5)
 
@@ -182,43 +216,11 @@ def todo():
 
             enter_button = Button(changer,text="Enter",width=13,command=hexa_change)
             enter_button.grid(row=3,column=0,columnspan=2,pady=5,padx=10)
+        
         else:
             messagebox.showwarning(title="No task Selected", message="You must select a task first!")
 
-    def red_change():
-        tasks_box.itemconfig(
-            tasks_box.curselection(),
-            fg='red'
-        )
-
-    def blue_change():
-        tasks_box.itemconfig(
-            tasks_box.curselection(),
-            fg='blue'
-        )
-
-    def green_change():
-        tasks_box.itemconfig(
-            tasks_box.curselection(),
-            fg='green'
-        )
-
-    def orange_change():
-        tasks_box.itemconfig(
-            tasks_box.curselection(),
-            fg='orange'
-        )
-
-    def hexa_change():
-        hexa_code = hexa_entry.get()
-        try:
-            tasks_box.itemconfig(
-                tasks_box.curselection(),
-                fg=hexa_code
-            )
-        except:
-            messagebox.showerror(title="Invalid Code", message="Enter a valid hexa color")
-
+    
     menu_bar = Menu(module1)
     module1.config(menu=menu_bar)
 
